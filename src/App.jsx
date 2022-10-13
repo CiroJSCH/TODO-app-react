@@ -1,11 +1,15 @@
-import { useState } from 'react'
+import { useState } from "react";
+import TaskForm from "./components/TaskForm";
+import TaskList from "./components/TaskList";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <h1>Hola</h1>
-  )
+    <div className="container text-center mt-3 d-flex flex-column justify-content-center">
+      <h1 className="">Todo List</h1>
+      <TaskForm />
+      <TaskList />
+    </div>
+  );
 }
 
-export default App
+export default App;
