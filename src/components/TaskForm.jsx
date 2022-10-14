@@ -10,19 +10,14 @@ const TaskForm = () => {
 
   const [description, setDescription] = useState("");
   const [errorDescription, setErrorDescription] = useState(false);
-  const [errorDescDetail, setErrorDescDetail] = useState("");
+  const [errorDesDetail, setErrorDesDetail] = useState("");
 
   const { createTask } = useContext(TaskContext);
 
-  const nameHandler = (e) => {
-    setName(e.target.value);
-  };
-
-  const descriptionHandler = (e) => {
-    setDescription(e.target.value);
-  };
-
   const submitHandler = () => {
+    let nameOk = false;
+    let descriptionOk = false;
+
     if (name === "") {
       setErrorName(true);
       setErrorNameDetail("This field is required");
@@ -32,23 +27,25 @@ const TaskForm = () => {
     } else {
       setErrorName(false);
       setErrorNameDetail("");
+      nameOk = true;
     }
 
     if (description === "") {
       setErrorDescription(true);
-      setErrorDescDetail("This field is required");
-    } else if (description.length > 100) {
+      setErrorDesDetail("This field is required");
+    } else if (description.length > 200) {
       setErrorDescription(true);
-      setErrorDescDetail("Max 100 characters");
+      setErrorDesDetail("Max 200 characters");
     } else {
       setErrorDescription(false);
-      setErrorDescDetail("");
+      setErrorDesDetail("");
+      descriptionOk = true;
     }
 
-    if (!errorName && !errorDescription) {
-      if (name !== "" && description !== "") {
-        createTask(name, description);
-      }
+    if (nameOk && descriptionOk) {
+      createTask(name, description);
+      setName("");
+      setDescription("");
     }
   };
 
@@ -60,7 +57,7 @@ const TaskForm = () => {
           label="Task Name"
           variant="outlined"
           className="mb-3"
-          onChange={nameHandler}
+          onChange={(e) => setName(e.target.value)}
           value={name}
           error={errorName}
           helperText={errorNameDetail}
@@ -71,10 +68,10 @@ const TaskForm = () => {
           variant="outlined"
           multiline
           rows={4}
-          onChange={descriptionHandler}
+          onChange={(e) => setDescription(e.target.value)}
           value={description}
           error={errorDescription}
-          helperText={errorDescDetail}
+          helperText={errorDesDetail}
         />
         <Button
           className="mt-3 w-100"
@@ -89,3 +86,4 @@ const TaskForm = () => {
 };
 
 export default TaskForm;
+
