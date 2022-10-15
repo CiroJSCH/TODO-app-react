@@ -6,13 +6,33 @@ const TaskContextProvider = (props) => {
   const [tasks, setTasks] = useState([]);
 
   const createTask = (name, description) => {
-    setTasks([...tasks, { name, description, id: tasks.length }]);
-    localStorage.setItem("tasks", JSON.stringify([...tasks, { name, description, id: tasks.length }]));
+    setTasks([
+      ...tasks,
+      { name, description, id: tasks.length, completed: false },
+    ]);
+    localStorage.setItem(
+      "tasks",
+      JSON.stringify([
+        ...tasks,
+        { name, description, id: tasks.length, completed: false },
+      ])
+    );
   };
 
   const deleteTask = (id) => {
     setTasks(tasks.filter((task) => task.id !== id));
-    localStorage.setItem("tasks", JSON.stringify(tasks.filter((task) => task.id !== id)));
+    localStorage.setItem(
+      "tasks",
+      JSON.stringify(tasks.filter((task) => task.id !== id))
+    );
+  };
+
+  const toggleComplete = (task) => {
+    const index = tasks.indexOf(task);
+    const tempTasks = [...tasks];
+    tempTasks[index].completed = !tempTasks[index].completed;
+    setTasks(tempTasks);
+    localStorage.setItem("tasks", JSON.stringify(tempTasks));
   };
 
   useEffect(() => {
@@ -24,7 +44,9 @@ const TaskContextProvider = (props) => {
   }, [tasks]);
 
   return (
-    <TaskContext.Provider value={{ tasks, createTask, deleteTask }}>
+    <TaskContext.Provider
+      value={{ tasks, createTask, deleteTask, toggleComplete }}
+    >
       {props.children}
     </TaskContext.Provider>
   );
